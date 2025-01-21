@@ -10,6 +10,22 @@ function newGame() {
     game.score = 0;
     game.playerMoves =[];
     game.currentGame = [];
+    for (let circle of document.getElementsByClassName("circle")) {
+        if (circle.getAttribute("data-listener") != "true") {
+            /* the click object as 'e' with that  because we're going to need it.
+                And the reason we need it, is that we're going to  
+                get our click targets ID. So depending on which  circle, we click on the ID will be button1,  
+                button2, button3, or button4.
+            */
+            circle.addEventListener("click", (e) => {
+                let move = e.target.getAttribute("id");
+                lightsOn(move);
+                game.playerMoves.push(move);
+                playerTurn();
+            });
+            circle.setAttribute("data-listener", "true");
+        }
+    }
     showScore();
     addTurn();
     game.turnNumber = 0;
