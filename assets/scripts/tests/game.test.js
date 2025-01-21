@@ -80,19 +80,29 @@ describe("gameplay works correctly", () => {
         game.score = 0;
         game.currentGame = [];
         game.playerMoves = [];
-    })
+    });
     test("addTurn adds a new turn to the game", () => {
         addTurn();
         expect(game.currentGame.length).toBe(2);
-    }) 
+    });
     test("should add correct class to light up the buttons", () => {
         let button = document.getElementById(game.currentGame[0]);
         lightsOn(game.currentGame[0]);
         expect(button.classList).toContain("light");
-    })
+    });
     test("showTurns should update game.turnNumber", () => {
         game.turnNumber = 42;
         showTurns();
         expect(game.turnNumber).toBe(0);
-    })
+    });
+    test("should increment the score if the turn is correct", () => {
+        /* To simulate the situation, as you'll remember, in the beforeEach  function for our gameplay, we're adding one turn.
+            So we're going to take that turn and  we're going to push it into the playerMoves array  
+            before calling playerTurn. That way we know that  we have a correct answer because the playerTurn  
+            and the computersTurn match each other
+        */
+        game.playerMoves.push(game.currentGame[0]);
+        playerTurn();
+        expect(game.score).toBe(1);
+    });
 });

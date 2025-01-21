@@ -24,8 +24,9 @@ function newGame() {
                 playerTurn();
             });
             circle.setAttribute("data-listener", "true");
-        }
+        } 
     }
+
     showScore();
     addTurn();
     game.turnNumber = 0;
