@@ -2,7 +2,11 @@
  * @jest-environment jsdom
  */
 
-const { game, newGame, showScore, addTurn ,lightsOn, showTurns } = require("../game")
+const { game, newGame, showScore, addTurn ,lightsOn, showTurns, playerTurn } = require("../game")
+
+// spy on window object for the alert method as alert is one of window methods
+// we will catch the alert when it happen and divert it harmlessly into an empty funciton
+jest.spyOn(window, "alert").mockImplementation(() => {});
 
 beforeAll(() => {
     let fs = require("fs");
@@ -105,4 +109,9 @@ describe("gameplay works correctly", () => {
         playerTurn();
         expect(game.score).toBe(1);
     });
+    test("should call an alert if the move is wrong", () => {
+        game.playerMoves.push("wrong");
+        playerTurn();
+        expect(window.alert).toBeCalledWith("Wrong move!");
+    })
 });

@@ -18,10 +18,14 @@ function newGame() {
                 button2, button3, or button4.
             */
             circle.addEventListener("click", (e) => {
-                let move = e.target.getAttribute("id");
-                lightsOn(move);
-                game.playerMoves.push(move);
-                playerTurn();
+                if (game.currentGame.length > 0) {
+                    let move = e.target.getAttribute("id");
+                    //s store move inside game.lastButton 
+                    game.lastButton = move;
+                    lightsOn(move);
+                    game.playerMoves.push(move);
+                    playerTurn();
+                }
             });
             circle.setAttribute("data-listener", "true");
         } 
@@ -62,10 +66,23 @@ function showTurns() {
 }
 
 function playerTurn() {
-    
+    // get the index of the last playerMove array to compare with current game array
+    let i = game.playerMoves.length -1;
+    if (game.currentGame[i] === game.playerMoves[i]) {
+        if (game.currentGame.length == game.playerMoves.length) {
+            // increment the score
+            game.score++;
+            showScore();
+            // add a new turn
+            addTurn();
+        }
+    } else {
+        alert("Wrong move!");
+        newGame();
+    }
 }
 
-module.exports = { game, newGame, showScore, addTurn, lightsOn, showTurns };
+module.exports = { game, newGame, showScore, addTurn, lightsOn, showTurns, playerTurn };
 // why the curly braces? Well this is because we'll be exporting more than  
 // one object and function from this file,  so we need to put them in curly braces. 
 
