@@ -35,6 +35,16 @@ describe("game object contains correct keys", () => {
     test("choices contain correct ids", () => {
         expect(game.choices).toEqual(["button1", "button2", "button3", "button4"])
     });
+    test("turnInProgress key exists", () => {
+        expect("turnInProgress" in game).toBe(true);
+    })
+    test("turnInProgress key value is false", () => {
+        expect(game.turnInProgress).toBe(false);
+    })
+
+    test("lastButton key exists", () => {
+        expect("lastButton" in game).toBe(true);
+    })
 });
 
 describe("newGame works correctly", () => {
@@ -46,6 +56,8 @@ describe("newGame works correctly", () => {
         game.currentGame = ["button1", "button2"];
         document.getElementById("score").innerText = "42";
         game.turnNumber = 42
+        game.turnInProgress = true;
+        game.lastButton = "button1";
         newGame()
     });
     test("should set game score to zero", () => {
@@ -70,6 +82,12 @@ describe("newGame works correctly", () => {
             expect(element.getAttribute("data-listener")).toEqual("true");
         }
     });
+    test("expect turnInProgress value to be set to false", () => {
+        expect(game.turnInProgress).toEqual(false);
+    })
+    test("expect lastButton value to be set to empty", () => {
+        expect(game.lastButton).toBe("");
+    })
 });
 
 describe("gameplay works correctly", () => {
@@ -113,5 +131,15 @@ describe("gameplay works correctly", () => {
         game.playerMoves.push("wrong");
         playerTurn();
         expect(window.alert).toBeCalledWith("Wrong move!");
-    })
+    });
+    test("showTurns toggle turnInProgress to true", () => {
+        showTurns();
+        expect(game.turnInProgress).toBe(true);
+    });
+    test("clicking during computer sequence should fail", () => {
+        showTurns();
+        game.lastButton = "";
+        document.getElementById("button2").click();
+        expect(game.lastButton).toEqual("");
+    });
 });
